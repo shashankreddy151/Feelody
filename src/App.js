@@ -2,28 +2,32 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from "react-route
 import { AnimatePresence } from "framer-motion";
 import MoodSelector from "./components/MoodSelector";
 import Player from "./pages/Player";
+import Logo from "./components/Logo";
 import './App.css';
 
 function AnimatedRoutes() {
   const location = useLocation();
   
   return (
-    <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
-        <Route
-          path="/"
-          element={
-            <div className="min-h-screen flex flex-col items-center justify-center">
-              <MoodSelector />
-            </div>
-          }
-        />
-        <Route
-          path="/player"
-          element={<Player />}
-        />
-      </Routes>
-    </AnimatePresence>
+    <>
+      <Logo />
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
+          <Route
+            path="/"
+            element={
+              <div className="min-h-screen flex flex-col items-center justify-center">
+                <MoodSelector />
+              </div>
+            }
+          />
+          <Route
+            path="/player"
+            element={<Player />}
+          />
+        </Routes>
+      </AnimatePresence>
+    </>
   );
 }
 

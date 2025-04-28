@@ -6,6 +6,12 @@ import { getMoodStyles } from '../utils/utils';
 const Player = () => {
   const navigate = useNavigate();
 
+  const handleBackClick = () => {
+    localStorage.removeItem('selectedMood');
+    document.body.style.background = '#395C7E';
+    navigate('/');
+  };
+
   useEffect(() => {
     const selectedMood = localStorage.getItem('selectedMood');
     if (selectedMood) {
@@ -34,7 +40,7 @@ const Player = () => {
       >
         <h1 className="text-3xl font-bold text-white mb-4">Music Player</h1>
         <button 
-          onClick={() => navigate('/')}
+          onClick={handleBackClick}
           className="px-4 py-2 bg-white/20 rounded-lg text-white hover:bg-white/30 transition-colors"
         >
           Back to Mood Selection
