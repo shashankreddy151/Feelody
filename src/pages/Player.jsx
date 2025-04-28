@@ -1,7 +1,11 @@
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { getMoodStyles } from '../utils/utils';
 
 const Player = () => {
+  const navigate = useNavigate();
+
   useEffect(() => {
     const selectedMood = localStorage.getItem('selectedMood');
     if (selectedMood) {
@@ -15,12 +19,28 @@ const Player = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-8">
-      <div className="bg-white/20 backdrop-blur-lg rounded-lg p-8 w-full max-w-md">
-        {/* Player content will go here */}
+    <motion.div 
+      className="min-h-screen flex flex-col items-center justify-center p-8"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.5 }}
+    >
+      <motion.div 
+        className="bg-white/20 backdrop-blur-lg rounded-lg p-8 w-full max-w-md"
+        initial={{ scale: 0.95 }}
+        animate={{ scale: 1 }}
+        transition={{ delay: 0.2 }}
+      >
         <h1 className="text-3xl font-bold text-white mb-4">Music Player</h1>
-      </div>
-    </div>
+        <button 
+          onClick={() => navigate('/')}
+          className="px-4 py-2 bg-white/20 rounded-lg text-white hover:bg-white/30 transition-colors"
+        >
+          Back to Mood Selection
+        </button>
+      </motion.div>
+    </motion.div>
   );
 };
 

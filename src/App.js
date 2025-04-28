@@ -1,16 +1,19 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
 import MoodSelector from "./components/MoodSelector";
 import Player from "./pages/Player";
-import './App.css'; // you can keep this if needed
+import './App.css';
 
-function App() {
+function AnimatedRoutes() {
+  const location = useLocation();
+  
   return (
-    <Router>
-      <Routes>
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
         <Route
           path="/"
           element={
-            <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-indigo-400 via-purple-500 to-pink-500 p-8">
+            <div className="min-h-screen flex flex-col items-center justify-center">
               <MoodSelector />
             </div>
           }
@@ -20,6 +23,14 @@ function App() {
           element={<Player />}
         />
       </Routes>
+    </AnimatePresence>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AnimatedRoutes />
     </Router>
   );
 }

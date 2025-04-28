@@ -1,15 +1,17 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from "framer-motion";
 import { getMoodStyles } from '../utils/utils';
 import './MoodSelector.css';
 
 const MoodSelector = () => {
   const [selectedMood, setSelectedMood] = useState(null);
+  const navigate = useNavigate();
 
   const handleMoodSelect = (mood) => {
     setSelectedMood(mood);
     localStorage.setItem('selectedMood', mood);
-    window.location.href = "/player";
+    navigate('/player');
   };
 
   useEffect(() => {
@@ -28,6 +30,7 @@ const MoodSelector = () => {
       <h1 className="text-4xl font-bold text-center mb-8 text-white">Pick Your Mood 🎶</h1>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6 p-6">
         {[
+
           { mood: 'happy', icon: '😊', label: 'Happy' },
           { mood: 'exuberant', icon: '😄', label: 'Exuberant' },
           { mood: 'energetic', icon: '⚡', label: 'Energetic' },
