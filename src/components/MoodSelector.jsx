@@ -27,10 +27,12 @@ const MoodSelector = () => {
 
   return (
     <div className="mood-selector">
-      <h1 className="text-4xl font-bold text-center mb-8 text-white">Pick Your Mood 🎶</h1>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 p-6">
+      <div className="flex items-center justify-center gap-4 mb-12">
+        <h1 className="mood-header text-5xl font-bold">Pick Your Mood</h1>
+        <span className="headphones-icon">🎧</span>
+      </div>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
         {[
-
           { mood: 'happy', icon: '😊', label: 'Happy' },
           { mood: 'exuberant', icon: '😄', label: 'Exuberant' },
           { mood: 'energetic', icon: '⚡', label: 'Energetic' },
@@ -39,26 +41,18 @@ const MoodSelector = () => {
           { mood: 'depression', icon: '😔', label: 'Depression' },
           { mood: 'calm', icon: '🧘', label: 'Calm' },
           { mood: 'contentment', icon: '😊', label: 'Contentment' },
-        ].map(({ mood, icon, label }) => {
-          const styles = getMoodStyles(mood);
-          return (
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              key={mood}
-              className={`mood-card ${selectedMood === mood ? 'selected' : ''}`}
-              onClick={() => handleMoodSelect(mood)}
-              style={{
-                background: selectedMood === mood ? styles.cardBg : 'rgba(255, 255, 255, 0.2)',
-                color: styles.textColor,
-                animation: mood === 'energetic' ? styles.animation : 'none'
-              }}
-            >
-              <div className="mood-icon text-5xl mb-3">{icon}</div>
-              <div className="mood-label text-xl font-semibold">{label}</div>
-            </motion.div>
-          );
-        })}
+        ].map(({ mood, icon, label }) => (
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            key={mood}
+            className={`mood-card ${selectedMood === mood ? 'selected' : ''}`}
+            onClick={() => handleMoodSelect(mood)}
+          >
+            <div className="mood-icon">{icon}</div>
+            <div className="mood-label">{label}</div>
+          </motion.div>
+        ))}
       </div>
     </div>
   );
