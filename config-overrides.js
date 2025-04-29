@@ -8,12 +8,17 @@ module.exports = function override(config, env) {
     "util": false, // Using false instead of util/ to avoid the error
     "https": require.resolve("https-browserify"),
     "http": require.resolve("stream-http"),
-    "querystring": require.resolve("querystring-es3"),
     "url": require.resolve("url/"),
-    "path": require.resolve("path-browserify"),
-    "zlib": require.resolve("browserify-zlib"),
-    "assert": require.resolve("assert/"),
-    "vm": require.resolve("vm-browserify"),
+  };
+
+  // Add headers to allow streaming from Audius
+  config.devServer = {
+    ...config.devServer,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+      "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
+    }
   };
 
   config.plugins.push(
@@ -24,4 +29,4 @@ module.exports = function override(config, env) {
   );
 
   return config;
-};
+}
