@@ -1,7 +1,8 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from "framer-motion";
 import { getMoodStyles } from '../utils/utils';
+import FallingNotes from './FallingNotes';
 import './MoodSelector.css';
 
 const MOODS = [
@@ -19,19 +20,6 @@ const MoodSelector = () => {
   const [selectedMood, setSelectedMood] = useState(null);
   const [hoveredMood, setHoveredMood] = useState(null);
   const navigate = useNavigate();
-
-  const handleMouseMove = useCallback((e) => {
-    const glowEl = document.querySelector('.mood-glow');
-    if (glowEl) {
-      glowEl.style.setProperty('--mouse-x', `${e.clientX}px`);
-      glowEl.style.setProperty('--mouse-y', `${e.clientY}px`);
-    }
-  }, []);
-
-  useEffect(() => {
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [handleMouseMove]);
 
   const handleMoodSelect = (mood) => {
     setSelectedMood(mood);
@@ -52,7 +40,7 @@ const MoodSelector = () => {
 
   return (
     <div className="mood-selector relative z-10">
-      <div className="mood-glow" />
+      <FallingNotes />
       
       {/* Background gradient that changes on hover */}
       <motion.div 
@@ -99,9 +87,22 @@ const MoodSelector = () => {
               onHoverEnd={() => setHoveredMood(null)}
               whileHover={{ 
                 scale: 1.05,
-                transition: { duration: 0.2 }
+                transition: { 
+                  duration: 0.05,
+                  type: "spring",
+                  stiffness: 400,
+                  damping: 10
+                }
               }}
-              whileTap={{ scale: 0.95 }}
+              whileTap={{ 
+                scale: 0.95,
+                transition: { 
+                  duration: 0.05,
+                  type: "spring",
+                  stiffness: 400,
+                  damping: 10
+                }
+              }}
             >
               <motion.div 
                 className="mood-icon text-4xl md:text-5xl mb-4"

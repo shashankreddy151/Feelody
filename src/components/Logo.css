@@ -1,6 +1,6 @@
 .logo-container {
-  position: fixed;
-  top: 2rem;
+  position: absolute;
+  top: 1rem;  /* Reduced from 2rem to 1rem */
   left: 2rem;
   text-decoration: none;
   z-index: 50;
@@ -9,7 +9,7 @@
 .logo {
   display: flex;
   align-items: center;
-  gap: 1.5rem; /* Increased from 0.75rem to 1.5rem */
+  gap: 2rem;  /* Increased from 1.5rem to 2rem */
 }
 
 .logo-icon {

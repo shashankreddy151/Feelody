@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { getMoodStyles } from '../utils/utils';
 import lastfmService from '../services/lastfmService';
 import LoadingAnimation from '../components/LoadingAnimation';
+import FallingNotes from '../components/FallingNotes';
 
 const Player = () => {
   const navigate = useNavigate();
@@ -97,12 +98,13 @@ const Player = () => {
 
   return (
     <motion.div 
-      className="min-h-screen flex flex-col bg-gradient-to-b from-black/40 to-black/60"
+      className="min-h-screen flex flex-col bg-gradient-to-b from-black/40 to-black/60 mt-8" // Reduced from mt-16 to mt-8
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
     >
+      <FallingNotes />
       {/* Header with floating effect */}
       <motion.div 
         className="sticky top-0 z-10 backdrop-blur-xl bg-black/40 p-4 md:p-6"

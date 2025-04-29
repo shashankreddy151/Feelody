@@ -9,14 +9,14 @@ function AnimatedRoutes() {
   const location = useLocation();
   
   return (
-    <>
+    <div className="relative min-h-screen pt-12"> {/* Reduced from pt-20 to pt-12 */}
       <Logo />
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route
             path="/"
             element={
-              <div className="min-h-screen flex flex-col items-center justify-center">
+              <div className="min-h-[calc(100vh-3rem)] flex flex-col items-center justify-center"> {/* Reduced from 5rem to 3rem */}
                 <MoodSelector />
               </div>
             }
@@ -27,7 +27,7 @@ function AnimatedRoutes() {
           />
         </Routes>
       </AnimatePresence>
-    </>
+    </div>
   );
 }
 
