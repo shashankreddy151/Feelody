@@ -3,11 +3,47 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getMoodStyles } from '../utils/utils';
 import lastfmService from '../services/lastfmService';
+import audiusService from '../services/audiusService';
 import LoadingAnimation from '../components/LoadingAnimation';
 import FallingNotes from '../components/FallingNotes';
 import './Player.css';
 
-const Player = () => {
+const LoadingSpinner = () => (
+  <div className="inline-block">
+    <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+    </svg>
+  </div>
+);
+
+const PlayButton = ({ isPlaying, onClick, size = "small", isLoading = false }) => (
+  <button
+    onClick={onClick}
+    disabled={isLoading}
+    className={`${
+      size === "large" ? "p-4" : "p-2"
+    } bg-white/20 hover:bg-white/30 rounded-full transition-all transform hover:scale-105 active:scale-95 ${
+      isLoading ? 'cursor-wait' : ''
+    }`}
+  >
+    {isLoading ? (
+      <LoadingSpinner />
+    ) : isPlaying ? (
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" 
+        className={`${size === "large" ? "w-8 h-8" : "w-5 h-5"} text-white`}>
+        <path d="M6.75 5.25h2v13.5h-2v-13.5zm8.5 0h2v13.5h-2v-13.5z" />
+      </svg>
+    ) : (
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" 
+        className={`${size === "large" ? "w-8 h-8" : "w-5 h-5"} text-white`}>
+        <path d="M8 5.14v14l11-7-11-7z" />
+      </svg>
+    )}
+  </button>
+);
+
+const Player = ({ onTrackPlay, currentTrack, isPlaying, isLoadingTrack }) => {
   const navigate = useNavigate();
   const [tracks, setTracks] = useState([]);
   const [selectedTrack, setSelectedTrack] = useState(null);
@@ -15,13 +51,6 @@ const Player = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [artistInfo, setArtistInfo] = useState(null);
   const scrollContainerRef = useRef(null);
-
-  const handleBackClick = () => {
-    lastfmService.clearCache();
-    localStorage.removeItem('selectedMood');
-    document.body.style.background = '#395C7E';
-    navigate('/');
-  };
 
   const handleTrackSelect = async (track) => {
     setIsLoading(true);
@@ -32,6 +61,7 @@ const Player = () => {
       ]);
       setSelectedTrack(trackInfo);
       setArtistInfo(artistDetails);
+      onTrackPlay(track);
     } catch (error) {
       console.error('Error fetching track details:', error);
     } finally {
@@ -66,6 +96,14 @@ const Player = () => {
     }
   };
 
+  const handleBackClick = () => {
+    lastfmService.clearCache();
+    localStorage.removeItem('selectedMood');
+    document.body.style.background = '#395C7E';
+    navigate('/');
+  };
+
+  // Load tracks effect
   useEffect(() => {
     const loadTracks = async () => {
       const selectedMood = localStorage.getItem('selectedMood');
@@ -76,7 +114,6 @@ const Player = () => {
 
       try {
         const moodTracks = await lastfmService.getTracksByMood(selectedMood);
-        console.log('Loaded tracks:', moodTracks); // Debug log
         setTracks(moodTracks);
         const styles = getMoodStyles(selectedMood);
         document.body.style.background = styles.background;
@@ -160,21 +197,34 @@ const Player = () => {
                   <motion.div
                     key={`${track.artist.name}-${track.name}`}
                     className="group relative aspect-square bg-white/5 rounded-md overflow-hidden cursor-pointer transition-transform duration-300 ease-out hover:scale-[1.02]"
-                    onClick={() => handleTrackSelect(track)}
                   >
-                    {/* Album Art */}
-                    <img 
-                      src={track.image?.[3]?.['#text'] || track.album?.image?.[3]?.['#text'] || `https://via.placeholder.com/300?text=${encodeURIComponent(track.name)}`}
-                      alt={track.name}
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = `https://via.placeholder.com/300?text=${encodeURIComponent(track.name)}`;
-                      }}
-                    />
+                    <div onClick={() => handleTrackSelect(track)}>
+                      {/* Album Art */}
+                      <img 
+                        src={track.image?.[3]?.['#text'] || `https://via.placeholder.com/300?text=${encodeURIComponent(track.name)}`}
+                        alt={track.name}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = `https://via.placeholder.com/300?text=${encodeURIComponent(track.name)}`;
+                        }}
+                      />
+                      
+                      {/* Hover Overlay - Dark vintage effect */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    </div>
                     
-                    {/* Hover Overlay - Dark vintage effect */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    {/* Play Button Overlay */}
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <PlayButton 
+                        isPlaying={isPlaying && currentTrack?.id === track.id}
+                        isLoading={isLoadingTrack && currentTrack?.id === track.id}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onTrackPlay(track);
+                        }}
+                      />
+                    </div>
                     
                     {/* Track Info Container */}
                     <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
@@ -204,15 +254,25 @@ const Player = () => {
               >
                 <div className="bg-white/5 rounded-xl p-6 backdrop-blur-md">
                   <div className="flex gap-6">
-                    <img 
-                      src={selectedTrack.image?.[3]?.['#text'] || selectedTrack.album?.image?.[3]?.['#text'] || `https://via.placeholder.com/300?text=${encodeURIComponent(selectedTrack.name)}`}
-                      alt={selectedTrack.name}
-                      className="w-32 h-32 rounded-lg shadow-lg object-cover"
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = `https://via.placeholder.com/300?text=${encodeURIComponent(selectedTrack.name)}`;
-                      }}
-                    />
+                    <div className="relative">
+                      <img 
+                        src={selectedTrack.image?.[3]?.['#text'] || `https://via.placeholder.com/300?text=${encodeURIComponent(selectedTrack.name)}`}
+                        alt={selectedTrack.name}
+                        className="w-32 h-32 rounded-lg shadow-lg object-cover"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = `https://via.placeholder.com/300?text=${encodeURIComponent(selectedTrack.name)}`;
+                        }}
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <PlayButton 
+                          isPlaying={isPlaying && selectedTrack?.id === selectedTrack.id}
+                          isLoading={isLoadingTrack}
+                          onClick={() => onTrackPlay(selectedTrack)}
+                          size="large"
+                        />
+                      </div>
+                    </div>
                     <div>
                       <h2 className="text-2xl font-bold text-white mb-2">{selectedTrack.name}</h2>
                       <p className="text-white/80 text-lg">{selectedTrack.artist.name}</p>
@@ -240,7 +300,7 @@ const Player = () => {
                           whileHover={{ scale: 1.01 }}
                         >
                           <img 
-                            src={similar.image?.[1]?.['#text'] || similar.album?.image?.[1]?.['#text'] || `https://via.placeholder.com/300?text=${encodeURIComponent(similar.name)}`}
+                            src={similar.image?.[1]?.['#text'] || `https://via.placeholder.com/300?text=${encodeURIComponent(similar.name)}`}
                             alt={similar.name}
                             className="w-12 h-12 rounded object-cover"
                             onError={(e) => {

@@ -43,3 +43,108 @@
 .track-card:hover::after {
   opacity: 1;
 }
+
+/* Play button animation */
+@keyframes pulse-ring {
+  0% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.1); opacity: 0.4; }
+  100% { transform: scale(1); opacity: 0.8; }
+}
+
+/* Play button ring effect */
+.play-button-ring {
+  position: absolute;
+  inset: -4px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 9999px;
+  animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Now Playing animation */
+@keyframes equalizer {
+  0% { height: 5px; }
+  50% { height: 15px; }
+  100% { height: 5px; }
+}
+
+.equalizer-bars {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+  height: 15px;
+}
+
+.equalizer-bar {
+  width: 2px;
+  background-color: white;
+  border-radius: 1px;
+  animation: equalizer 0.8s ease infinite;
+}
+
+.equalizer-bar:nth-child(2) { animation-delay: 0.2s; }
+.equalizer-bar:nth-child(3) { animation-delay: 0.4s; }
+.equalizer-bar:nth-child(4) { animation-delay: 0.6s; }
+
+/* Active track indication */
+.track-playing {
+  position: relative;
+}
+
+.track-playing::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-radius: 0.375rem;
+  pointer-events: none;
+}
+
+/* Progress and volume slider styles */
+input[type="range"] {
+  height: 4px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8));
+  background-repeat: no-repeat;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease-in-out;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  -webkit-appearance: none;
+  box-shadow: none;
+  border: none;
+  background: transparent;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+/* Loading animation for track */
+.loading-track {
+  position: relative;
+}
+
+.loading-track::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, 
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: loading-shimmer 1.5s infinite;
+}

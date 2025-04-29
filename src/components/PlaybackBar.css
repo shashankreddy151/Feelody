@@ -1,0 +1,130 @@
+.playback-bar-enter {
+  transform: translateY(100%);
+}
+
+.playback-bar-enter-active {
+  transform: translateY(0);
+  transition: transform 300ms ease-in-out;
+}
+
+.playback-bar-exit {
+  transform: translateY(0);
+}
+
+.playback-bar-exit-active {
+  transform: translateY(100%);
+  transition: transform 300ms ease-in-out;
+}
+
+/* Custom Range Input Styling */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+/* Track */
+input[type="range"]::-webkit-slider-runnable-track {
+  background: #4D4D4D;
+  height: 4px;
+  border-radius: 2px;
+}
+
+input[type="range"]::-moz-range-track {
+  background: #4D4D4D;
+  height: 4px;
+  border-radius: 2px;
+}
+
+/* Thumb */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  margin-top: -4px;
+  background-color: #fff;
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  border: none;
+  transition: all 0.2s ease-in-out;
+  opacity: 0;
+}
+
+input[type="range"]::-moz-range-thumb {
+  border: none;
+  border-radius: 50%;
+  background-color: #fff;
+  height: 12px;
+  width: 12px;
+  transition: all 0.2s ease-in-out;
+  opacity: 0;
+}
+
+/* Show thumb on hover */
+input[type="range"]:hover::-webkit-slider-thumb {
+  opacity: 1;
+}
+
+input[type="range"]:hover::-moz-range-thumb {
+  opacity: 1;
+}
+
+/* Active thumb */
+input[type="range"]:active::-webkit-slider-thumb {
+  transform: scale(1.2);
+}
+
+input[type="range"]:active::-moz-range-thumb {
+  transform: scale(1.2);
+}
+
+/* Focus styles */
+input[type="range"]:focus {
+  outline: none;
+}
+
+input[type="range"]:focus::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+}
+
+input[type="range"]:focus::-moz-range-thumb {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+}
+
+/* Volume slider specific styles */
+.volume-slider input[type="range"] {
+  width: 93px;
+}
+
+/* Hover animations for buttons */
+.playback-control {
+  transition: transform 0.2s ease;
+}
+
+.playback-control:hover {
+  transform: scale(1.1);
+}
+
+.playback-control:active {
+  transform: scale(0.95);
+}
+
+/* Time display */
+.time-display {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Progress bar hover effect */
+.progress-bar-container:hover .progress-indicator {
+  transform: scale(1);
+}
+
+/* Queue button hover animation */
+.queue-button {
+  transition: transform 0.2s ease;
+}
+
+.queue-button:hover {
+  transform: translateY(-2px);
+}
