@@ -5,6 +5,7 @@ import { getMoodStyles } from '../utils/utils';
 import lastfmService from '../services/lastfmService';
 import LoadingAnimation from '../components/LoadingAnimation';
 import FallingNotes from '../components/FallingNotes';
+import './Player.css';
 
 const Player = () => {
   const navigate = useNavigate();
@@ -75,6 +76,7 @@ const Player = () => {
 
       try {
         const moodTracks = await lastfmService.getTracksByMood(selectedMood);
+        console.log('Loaded tracks:', moodTracks); // Debug log
         setTracks(moodTracks);
         const styles = getMoodStyles(selectedMood);
         document.body.style.background = styles.background;
@@ -148,7 +150,7 @@ const Player = () => {
               <motion.div 
                 ref={scrollContainerRef}
                 onScroll={handleScroll}
-                className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory hide-scrollbar"
+                className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6 pb-6"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
@@ -157,40 +159,31 @@ const Player = () => {
                 {tracks.map((track, index) => (
                   <motion.div
                     key={`${track.artist.name}-${track.name}`}
-                    className={`flex-shrink-0 w-[200px] snap-start ${
-                      selectedTrack?.name === track.name 
-                        ? 'ring-2 ring-white/40' 
-                        : ''
-                    }`}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ 
-                      duration: 0.5, 
-                      delay: 0.6 + (index * 0.1),
-                      type: "spring",
-                      stiffness: 100
-                    }}
-                    whileHover={{ 
-                      scale: 1.05,
-                      transition: { duration: 0.2 } 
-                    }}
-                    whileTap={{ scale: 0.95 }}
+                    className="group relative aspect-square bg-white/5 rounded-md overflow-hidden cursor-pointer transition-transform duration-300 ease-out hover:scale-[1.02]"
                     onClick={() => handleTrackSelect(track)}
                   >
-                    <div className="relative group cursor-pointer bg-white/5 rounded-xl overflow-hidden transition-all hover:bg-white/10">
-                      <img 
-                        src={track.image?.[3]?.['#text'] || 'default-album-art.png'} 
-                        alt={track.name}
-                        className="w-full aspect-square object-cover"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
-                        <div>
-                          <div className="text-white font-medium truncate">{track.name}</div>
-                          <div className="text-white/70 text-sm truncate">
-                            {track.artist.name}
-                          </div>
-                        </div>
-                      </div>
+                    {/* Album Art */}
+                    <img 
+                      src={track.image?.[3]?.['#text'] || track.album?.image?.[3]?.['#text'] || `https://via.placeholder.com/300?text=${encodeURIComponent(track.name)}`}
+                      alt={track.name}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = `https://via.placeholder.com/300?text=${encodeURIComponent(track.name)}`;
+                      }}
+                    />
+                    
+                    {/* Hover Overlay - Dark vintage effect */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    
+                    {/* Track Info Container */}
+                    <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                      <h3 className="text-white font-medium text-sm sm:text-base truncate mb-1">
+                        {track.name}
+                      </h3>
+                      <p className="text-white/80 text-xs sm:text-sm truncate">
+                        {track.artist.name}
+                      </p>
                     </div>
                   </motion.div>
                 ))}
@@ -212,9 +205,13 @@ const Player = () => {
                 <div className="bg-white/5 rounded-xl p-6 backdrop-blur-md">
                   <div className="flex gap-6">
                     <img 
-                      src={selectedTrack.image?.[3]?.['#text'] || 'default-album-art.png'}
+                      src={selectedTrack.image?.[3]?.['#text'] || selectedTrack.album?.image?.[3]?.['#text'] || `https://via.placeholder.com/300?text=${encodeURIComponent(selectedTrack.name)}`}
                       alt={selectedTrack.name}
-                      className="w-32 h-32 rounded-lg shadow-lg"
+                      className="w-32 h-32 rounded-lg shadow-lg object-cover"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = `https://via.placeholder.com/300?text=${encodeURIComponent(selectedTrack.name)}`;
+                      }}
                     />
                     <div>
                       <h2 className="text-2xl font-bold text-white mb-2">{selectedTrack.name}</h2>
@@ -243,9 +240,13 @@ const Player = () => {
                           whileHover={{ scale: 1.01 }}
                         >
                           <img 
-                            src={similar.image?.[1]?.['#text'] || 'default-album-art.png'}
+                            src={similar.image?.[1]?.['#text'] || similar.album?.image?.[1]?.['#text'] || `https://via.placeholder.com/300?text=${encodeURIComponent(similar.name)}`}
                             alt={similar.name}
-                            className="w-12 h-12 rounded"
+                            className="w-12 h-12 rounded object-cover"
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = `https://via.placeholder.com/300?text=${encodeURIComponent(similar.name)}`;
+                            }}
                           />
                           <div>
                             <div className="text-white group-hover:text-white/90 transition-colors truncate">

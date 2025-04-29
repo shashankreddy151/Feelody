@@ -20,7 +20,9 @@ class LastFmService {
     const queryParams = new URLSearchParams({
       ...params,
       api_key: this.apiKey,
-      format: 'json'
+      format: 'json',
+      // Add parameter to ensure we get extended track info including images
+      extended: 1
     });
 
     const url = `${this.baseUrl}?${queryParams}`;
@@ -43,19 +45,57 @@ class LastFmService {
       const tags = MOOD_TAGS[mood];
       if (!tags) return [];
 
-      const trackPromises = tags.map(tag => 
-        this.makeRequest({
+      const trackPromises = tags.map(async tag => {
+        const result = await this.makeRequest({
           method: 'tag.gettoptracks',
           tag,
           limit: Math.ceil(options.limit / tags.length),
           page: options.page
-        })
-      );
+        });
+
+        // Debug logging
+        console.log('API Response for tag', tag, ':', result);
+        
+        if (!result.tracks || !result.tracks.track) {
+          console.error('Invalid response structure for tag:', tag);
+          return [];
+        }
+
+        return result.tracks.track;
+      });
 
       const results = await Promise.all(trackPromises);
-      const tracks = results.flatMap(result => result.tracks.track);
+      const tracks = results.flat();
+      console.log('All tracks before processing:', tracks);
+
+      const tracksWithMetadata = await Promise.all(
+        tracks.map(async track => {
+          try {
+            const trackInfo = await this.makeRequest({
+              method: 'track.getInfo',
+              artist: track.artist.name,
+              track: track.name,
+              autocorrect: 1
+            });
+
+            console.log('Track info for', track.name, ':', trackInfo);
+            
+            if (trackInfo.track && trackInfo.track.album) {
+              return {
+                ...track,
+                image: trackInfo.track.album.image || track.image,
+                album: trackInfo.track.album
+              };
+            }
+            return track;
+          } catch (error) {
+            console.error('Error fetching track info:', error);
+            return track;
+          }
+        })
+      );
       
-      const tracksWithScore = tracks.map(track => ({
+      const tracksWithScore = tracksWithMetadata.map(track => ({
         ...track,
         popularityScore: (parseInt(track.listeners) || 0) + (parseInt(track.playcount) || 0) / 1000
       }));
@@ -66,7 +106,7 @@ class LastFmService {
       this.cache.set(cacheKey, sortedTracks);
       return sortedTracks;
     } catch (error) {
-      console.error('Error fetching tracks:', error);
+      console.error('Error in getTracksByMood:', error);
       return [];
     }
   }
