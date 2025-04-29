@@ -175,7 +175,7 @@ const PlaybackBar = ({
             {formatTime(currentTime)}
           </span>
           <div 
-            className="flex-1 h-1 bg-gray-600 rounded-full overflow-hidden cursor-pointer relative"
+            className="progress-bar-container flex-1 h-6 bg-transparent rounded-full overflow-visible cursor-pointer relative group"
             onClick={(e) => {
               const rect = e.currentTarget.getBoundingClientRect();
               const x = e.clientX - rect.left;
@@ -183,12 +183,28 @@ const PlaybackBar = ({
               onProgressChange({ target: { value: percentage } });
             }}
           >
-            <div 
-              className="h-full bg-white group-hover:bg-green-500 transition-colors"
-              style={{ width: `${progress}%` }}
-            >
-              <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full opacity-0 group-hover:opacity-100 translate-x-1/2 shadow-lg" />
+            <div className="absolute top-1/2 -translate-y-1/2 w-full h-1 bg-gray-600 rounded-full">
+              <div 
+                className="h-full bg-white group-hover:bg-green-500 transition-colors relative"
+                style={{ width: `${progress}%` }}
+              />
             </div>
+            <div 
+              className="progress-dot absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full shadow-md transition-all duration-150"
+              style={{ left: `${progress}%`, transform: `translate(-50%, -50%) scale(${isPlaying ? '0.5' : '0'})` }}
+            />
+            <div 
+              className="hover-progress absolute top-0 left-0 w-full h-full opacity-0 group-hover:opacity-100"
+              onMouseMove={(e) => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const percentage = (x / rect.width) * 100;
+                e.currentTarget.style.background = `linear-gradient(to right, rgba(255, 255, 255, 0.3) ${percentage}%, transparent ${percentage}%)`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'transparent';
+              }}
+            />
           </div>
           <span className="text-xs text-gray-400 w-10">
             {formatTime(duration)}

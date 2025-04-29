@@ -128,3 +128,38 @@ input[type="range"]:focus::-moz-range-thumb {
 .queue-button:hover {
   transform: translateY(-2px);
 }
+
+/* Progress bar styles */
+.progress-bar-container {
+  transition: height 0.15s ease;
+  padding: 12px 0; /* Add padding to increase hit area */
+}
+
+.progress-bar-container:hover {
+  height: 0.25rem;
+}
+
+/* Make sure the hover effect works on the entire hit area */
+.hover-progress {
+  transition: opacity 0.15s ease;
+  cursor: pointer;
+  margin: -12px 0; /* Compensate for the padding to ensure proper hover area */
+}
+
+/* Progress dot styles */
+.progress-dot {
+  opacity: 0;
+  transition: transform 300ms ease-out, opacity 600ms ease-out;
+  transform: translate(-50%, -50%) scale(0.75) !important;
+}
+
+.progress-bar-container:hover .progress-dot {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1) !important;
+  transition: transform 300ms ease-out, opacity 300ms ease-out;
+}
+
+/* Ensure smooth transitions */
+.progress-bar-container > div {
+  transition: width 0.1s linear;
+}
