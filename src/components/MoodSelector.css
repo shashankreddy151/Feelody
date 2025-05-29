@@ -4,17 +4,28 @@
   padding: 2rem;
   position: relative;
   z-index: 10;
+  min-height: calc(100vh - 3rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .mood-header {
   color: white;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
+  text-shadow: 
+    0 0 20px rgba(255, 255, 255, 0.5),
+    0 4px 20px rgba(0, 0, 0, 0.3);
+  filter: drop-shadow(0 8px 32px rgba(0, 0, 0, 0.2));
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 0.9;
 }
 
 .headphones-icon {
-  font-size: 3rem;
-  filter: drop-shadow(0 2px 8px rgba(255, 255, 255, 0.3));
+  font-size: 4rem;
+  filter: 
+    drop-shadow(0 8px 16px rgba(255, 255, 255, 0.3))
+    drop-shadow(0 0 30px rgba(255, 255, 255, 0.2));
 }
 
 .mood-card {
@@ -26,47 +37,175 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 1.5rem;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 2rem;
   box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.1),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-  transition: all 0.05s cubic-bezier(0.19, 1, 0.22, 1);
+    0 20px 40px rgba(0, 0, 0, 0.2),
+    0 10px 25px rgba(0, 0, 0, 0.15),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.2),
+    inset 0 2px 0 rgba(255, 255, 255, 0.3);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   will-change: transform;
   position: relative;
   overflow: hidden;
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(20px);
+  background-clip: padding-box;
+  transform-style: preserve-3d;
+  perspective: 1000px;
 }
 
 .mood-card::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at center, rgba(255,255,255,0.15) 0%, transparent 70%);
+  background: 
+    radial-gradient(circle at 30% 20%, rgba(255,255,255,0.3) 0%, transparent 50%),
+    radial-gradient(circle at 70% 80%, rgba(255,255,255,0.2) 0%, transparent 50%);
   opacity: 0;
-  transition: opacity 0.05s ease;
+  transition: opacity 0.4s ease;
+  border-radius: inherit;
 }
 
 .mood-card:hover::before {
   opacity: 1;
 }
 
+.mood-card::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.3s ease;  z-index: -1;
+}
+
+.mood-card:hover::after {
+  opacity: 1;
+}
+
 .mood-icon {
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
-  transition: transform 0.05s cubic-bezier(0.19, 1, 0.22, 1);
+  filter: 
+    drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))
+    drop-shadow(0 0 20px rgba(255, 255, 255, 0.2));
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
-  z-index: 1;
+  z-index: 10;
+  transform-origin: center;
 }
 
 .mood-label {
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: transform 0.05s cubic-bezier(0.19, 1, 0.22, 1);
+  text-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.5),
+    0 0 20px rgba(255, 255, 255, 0.2);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
-  z-index: 1;
+  z-index: 10;
+  font-weight: 600;
+  letter-spacing: 0.02em;
 }
 
+.mood-card:hover .mood-icon {
+  filter: 
+    drop-shadow(0 6px 12px rgba(0, 0, 0, 0.4))
+    drop-shadow(0 0 30px rgba(255, 255, 255, 0.4));
+  transform: scale(1.1) translateY(-2px);
+}
+
+.mood-card:hover .mood-label {
+  text-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.6),
+    0 0 30px rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+/* Enhanced responsive design */
+@media (max-width: 768px) {
+  .mood-selector {
+    padding: 1rem;
+  }
+  
+  .mood-card {
+    padding: 1.5rem;
+    border-radius: 1.5rem;
+  }
+  
+  .mood-header {
+    font-size: 2.5rem !important;
+    line-height: 1.1;
+  }
+}
+
+@media (max-width: 640px) {
+  .mood-card {
+    padding: 1rem;
+    aspect-ratio: 0.9;
+  }
+  
+  .mood-icon {
+    font-size: 2.5rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  
+  .mood-label {
+    font-size: 0.9rem !important;
+  }
+}
+
+/* Floating animation for icons */
 @keyframes float {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-5px); }
-  100% { transform: translateY(0); }
+  0%, 100% { 
+    transform: translateY(0) rotate(0deg); 
+  }
+  25% { 
+    transform: translateY(-8px) rotate(2deg); 
+  }
+  50% { 
+    transform: translateY(-4px) rotate(0deg); 
+  }
+  75% { 
+    transform: translateY(-12px) rotate(-2deg); 
+  }
+}
+
+.mood-card:nth-child(odd) .mood-icon {
+  animation: float 6s ease-in-out infinite;
+}
+
+.mood-card:nth-child(even) .mood-icon {
+  animation: float 6s ease-in-out infinite reverse;
+  animation-delay: 1s;
+}
+
+/* Glow effect on hover */
+.mood-card:hover {
+  box-shadow: 
+    0 25px 50px rgba(0, 0, 0, 0.25),
+    0 15px 35px rgba(0, 0, 0, 0.2),
+    inset 0 0 0 2px rgba(255, 255, 255, 0.3),
+    inset 0 4px 0 rgba(255, 255, 255, 0.4),
+    0 0 50px rgba(255, 255, 255, 0.15);
+}
+
+/* Pulse animation for selected card */
+.mood-card.selected {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 
+      0 20px 40px rgba(0, 0, 0, 0.2),
+      0 10px 25px rgba(0, 0, 0, 0.15),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.2),
+      inset 0 2px 0 rgba(255, 255, 255, 0.3);
+  }
+  50% {
+    box-shadow: 
+      0 25px 50px rgba(0, 0, 0, 0.25),
+      0 15px 35px rgba(0, 0, 0, 0.2),
+      inset 0 0 0 2px rgba(255, 255, 255, 0.4),
+      inset 0 4px 0 rgba(255, 255, 255, 0.5),
+      0 0 40px rgba(255, 255, 255, 0.2);
+  }
 }

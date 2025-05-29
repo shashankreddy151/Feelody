@@ -11,9 +11,55 @@
 
 .music-note {
   position: absolute;
-  color: rgba(255, 255, 255, 0.3);
-  font-size: 2rem;
+  font-size: 2.5rem;
   pointer-events: none;
+  will-change: transform, opacity, filter;
+  font-weight: 600;
+  user-select: none;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
+
+.ambient-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.glow-orb {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(59, 130, 246, 0.05) 30%,
+    rgba(147, 51, 234, 0.03) 60%,
+    transparent 100%
+  );
+  filter: blur(40px);
   will-change: transform, opacity;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+/* Enhanced performance optimizations */
+@media (prefers-reduced-motion: reduce) {
+  .music-note,
+  .glow-orb {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .music-note {
+    font-size: 1.8rem;
+  }
+  
+  .glow-orb {
+    width: 120px;
+    height: 120px;
+    filter: blur(20px);
+  }
 }

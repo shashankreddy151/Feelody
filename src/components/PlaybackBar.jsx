@@ -71,188 +71,203 @@ const PlaybackBar = ({
       );
     }
   };
-
   return (
     <motion.div
-      initial={{ y: 100 }}
-      animate={{ y: 0 }}
-      exit={{ y: 100 }}
-      className="fixed bottom-0 left-0 right-0 bg-gradient-to-b from-[#121212] to-[#181818] h-24 z-50 flex items-center px-4"
+      initial={{ y: 100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      exit={{ y: 100, opacity: 0 }}
+      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+      className="playback-bar fixed bottom-0 left-0 right-0 h-24 z-50 flex items-center px-4 md:px-6"
     >
-      {/* Left Section - Track Info */}
-      <div className="flex items-center w-[30%] min-w-[180px]">
-        <img 
-          src={currentTrack.image?.[2]?.['#text'] || `https://via.placeholder.com/64?text=${encodeURIComponent(currentTrack.name)}`}
+      {/* Left Section - Enhanced Track Info */}
+      <div className="flex items-center w-[30%] min-w-[180px] gap-4">
+        <motion.img 
+          src={currentTrack.image?.[2]?.['#text'] || `https://via.placeholder.com/64x64/1a1a2e/ffffff?text=${encodeURIComponent(currentTrack.name)}`}
           alt={currentTrack.name}
-          className="w-16 h-16 rounded shadow-lg"
+          className="track-image w-16 h-16 object-cover"
+          whileHover={{ scale: 1.05 }}
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = `https://via.placeholder.com/64x64/1a1a2e/ffffff?text=${encodeURIComponent(currentTrack.name)}`;
+          }}
         />
-        <div className="ml-4">
-          <h3 className="text-white text-sm font-medium truncate hover:underline cursor-pointer">
+        <div className="track-info flex-1 min-w-0">
+          <h3 className="text-sm font-medium truncate hover:underline cursor-pointer mb-1">
             {currentTrack.name}
           </h3>
-          <p className="text-gray-400 text-xs hover:underline cursor-pointer">
+          <p className="text-xs hover:underline cursor-pointer truncate">
             {currentTrack.artist.name}
           </p>
         </div>
-        <button className="ml-4 text-gray-400 hover:text-white transition-colors">
+        <motion.button 
+          className="heart-button p-2 rounded-full"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+        >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
           </svg>
-        </button>
-      </div>
-
-      {/* Center Section - Controls */}
-      <div className="flex flex-col items-center flex-1">
-        <div className="flex items-center gap-4 mb-2">
+        </motion.button>
+      </div>      {/* Center Section - Enhanced Controls */}
+      <div className="flex flex-col items-center flex-1 max-w-[722px] mx-auto">
+        <div className="flex items-center gap-4 mb-3">
           {/* Shuffle Button */}
-          <button 
+          <motion.button 
             onClick={() => setIsShuffle(!isShuffle)}
-            className={`text-sm p-2 rounded-full ${isShuffle ? 'text-green-500' : 'text-gray-400'} hover:text-white transition-colors`}
+            className={`control-button p-2 ${isShuffle ? 'active' : ''}`}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
               <path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/>
             </svg>
-          </button>
+          </motion.button>
 
           {/* Previous Button */}
-          <button 
+          <motion.button 
             onClick={onPrevTrack}
-            className="text-gray-400 hover:text-white p-2 rounded-full transition-colors"
+            className="control-button p-2"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
               <path d="M6 6h2v12H6V6zm3.5 6l8.5 6V6l-8.5 6z"/>
             </svg>
-          </button>
+          </motion.button>
 
-          {/* Play/Pause Button */}
-          <button 
+          {/* Enhanced Play/Pause Button */}
+          <motion.button 
             onClick={onPlayPause}
             disabled={isLoading}
-            className="w-8 h-8 rounded-full bg-white flex items-center justify-center hover:scale-105 transition-transform"
+            className="play-button w-12 h-12 rounded-full flex items-center justify-center"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
           >
             {isLoading ? (
-              <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
+              <div className="loading-spinner w-5 h-5 rounded-full" />
             ) : isPlaying ? (
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="black">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M8 5v14h3V5H8zm5 0v14h3V5h-3z"/>
               </svg>
             ) : (
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="black">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-0.5" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M8 5v14l11-7z"/>
               </svg>
             )}
-          </button>
+          </motion.button>
 
           {/* Next Button */}
-          <button 
+          <motion.button 
             onClick={onNextTrack}
-            className="text-gray-400 hover:text-white p-2 rounded-full transition-colors"
+            className="control-button p-2"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
               <path d="M16 6h2v12h-2V6zm-3.5 6l-8.5 6V6l8.5 6z"/>
             </svg>
-          </button>
+          </motion.button>
 
           {/* Repeat Button */}
-          <button 
+          <motion.button 
             onClick={handleRepeatClick}
-            className={`text-sm p-2 rounded-full relative ${
-              repeatMode > 0 ? 'text-green-500' : 'text-gray-400'
-            } hover:text-white transition-colors`}
+            className={`control-button p-2 relative ${repeatMode > 0 ? 'active' : ''}`}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M17 2l2 2-2 2M3 11v-1a4 4 0 014-4h12M7 22l-2-2 2-2M21 13v1a4 4 0 01-4 4H5"/>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 2l2 2-2 2M3 11v-1a4 4 0 014-4h12M7 22l-2-2 2-2M21 13v1a4 4 0 01-4 4H5"/>
             </svg>
             {repeatMode === 2 && (
-              <span className="absolute -top-1 -right-1 text-xs">1</span>
+              <span className="absolute -top-1 -right-1 text-xs bg-blue-500 rounded-full w-4 h-4 flex items-center justify-center text-white font-bold">
+                1
+              </span>
             )}
-          </button>
+          </motion.button>
         </div>
 
-        {/* Progress Bar */}
-        <div className="w-full max-w-[722px] flex items-center gap-2 group">
-          <span className="text-xs text-gray-400 w-10 text-right">
+        {/* Enhanced Progress Bar */}
+        <div className="w-full flex items-center gap-3">
+          <span className="time-display">
             {formatTime(currentTime)}
           </span>
           <div 
-            className="progress-bar-container flex-1 h-6 bg-transparent rounded-full overflow-visible cursor-pointer relative group"
+            className="progress-container flex-1 relative cursor-pointer"
             onClick={(e) => {
               const rect = e.currentTarget.getBoundingClientRect();
               const x = e.clientX - rect.left;
               const percentage = (x / rect.width) * 100;
-              onProgressChange({ target: { value: percentage } });
+              onProgressChange({ target: { value: Math.max(0, Math.min(100, percentage)) } });
             }}
           >
-            <div className="absolute top-1/2 -translate-y-1/2 w-full h-1 bg-gray-600 rounded-full">
-              <div 
-                className="h-full bg-white group-hover:bg-green-500 transition-colors relative"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
+            <div className="progress-fill" style={{ width: `${progress}%` }} />
             <div 
-              className="progress-dot absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full shadow-md transition-all duration-150"
-              style={{ left: `${progress}%`, transform: `translate(-50%, -50%) scale(${isPlaying ? '0.5' : '0'})` }}
-            />
-            <div 
-              className="hover-progress absolute top-0 left-0 w-full h-full opacity-0 group-hover:opacity-100"
-              onMouseMove={(e) => {
-                const rect = e.currentTarget.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const percentage = (x / rect.width) * 100;
-                e.currentTarget.style.background = `linear-gradient(to right, rgba(255, 255, 255, 0.3) ${percentage}%, transparent ${percentage}%)`;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'transparent';
-              }}
+              className="progress-thumb"
+              style={{ left: `${progress}%` }}
             />
           </div>
-          <span className="text-xs text-gray-400 w-10">
+          <span className="time-display">
             {formatTime(duration)}
           </span>
         </div>
-      </div>
-
-      {/* Right Section - Volume & Additional Controls */}
+      </div>      {/* Right Section - Enhanced Volume & Controls */}
       <div className="w-[30%] min-w-[180px] flex items-center justify-end gap-3">
         {/* Queue Button */}
-        <button className="text-gray-400 hover:text-white p-2 rounded-full transition-colors">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+        <motion.button 
+          className="control-button queue-button p-2"
+          whileHover={{ scale: 1.1, y: -2 }}
+          whileTap={{ scale: 0.9 }}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
             <path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z"/>
           </svg>
-        </button>
+        </motion.button>
 
-        {/* Volume Control */}
-        <div 
-          className="flex items-center gap-2 group relative"
-          onMouseEnter={() => setIsVolumeVisible(true)}
-          onMouseLeave={() => setIsVolumeVisible(false)}
+        {/* Enhanced Volume Control */}
+        <motion.div 
+          className="volume-control hidden md:flex"
+          onHoverStart={() => setIsVolumeVisible(true)}
+          onHoverEnd={() => setIsVolumeVisible(false)}
+          initial={false}
+          animate={{ width: isVolumeVisible ? 140 : 'auto' }}
+          transition={{ duration: 0.3 }}
         >
-          <button 
+          <motion.button 
             onClick={handleVolumeClick}
-            className="text-gray-400 hover:text-white p-2 rounded-full transition-colors"
+            className="control-button p-2 flex-shrink-0"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
           >
             {getVolumeIcon()}
-          </button>
-          <div className={`w-24 transition-all ${isVolumeVisible ? 'opacity-100' : 'opacity-0'}`}>
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.01"
-              value={volume}
-              onChange={onVolumeChange}
-              className="w-full accent-white cursor-pointer"
-            />
-          </div>
-        </div>
+          </motion.button>
+          <motion.input
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value={isMuted ? 0 : volume}
+            onChange={onVolumeChange}
+            className="volume-slider"
+            initial={{ opacity: 0, width: 0 }}
+            animate={{ 
+              opacity: isVolumeVisible ? 1 : 0,
+              width: isVolumeVisible ? 100 : 0 
+            }}
+            transition={{ duration: 0.3 }}
+          />
+        </motion.div>
 
         {/* Additional Controls */}
-        <button className="text-gray-400 hover:text-white p-2 rounded-full transition-colors">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
-            <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+        <motion.button 
+          className="control-button p-2"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12,6 12,12 16,14"/>
           </svg>
-        </button>
+        </motion.button>
       </div>
     </motion.div>
   );

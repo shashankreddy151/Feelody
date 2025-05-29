@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import './AudioPlayerBar.css';
 
 const AudioPlayerBar = ({ 
@@ -115,146 +115,191 @@ const AudioPlayerBar = ({
     }
     setIsMuted(!isMuted);
   };
-
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-[#121212] border-t border-[#282828] h-24 z-50">
-      {/* Progress Bar */}
-      <div className="absolute top-0 left-0 right-0 h-1 bg-[#4d4d4d] cursor-pointer group">
+    <motion.div 
+      className="audio-player-bar fixed bottom-0 left-0 right-0 h-24 z-50"
+      initial={{ y: 100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      exit={{ y: 100, opacity: 0 }}
+      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+    >
+      {/* Enhanced Progress Bar */}
+      <div className="progress-bar-container absolute top-0 left-0 right-0 h-1 cursor-pointer group">
         <input
           type="range"
           min="0"
           max="100"
           value={progress}
           onChange={handleProgressChange}
-          className="absolute inset-0 w-full opacity-0 cursor-pointer"
+          className="progress-input absolute inset-0 w-full opacity-0 cursor-pointer"
         />
-        <div 
-          className="h-full bg-red-500 relative"
-          style={{ width: `${progress}%` }}
-        >
-          <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full opacity-0 group-hover:opacity-100 transform translate-x-1/2" />
+        <div className="progress-track h-full">
+          <motion.div 
+            className="progress-fill h-full relative"
+            style={{ width: `${progress}%` }}
+            transition={{ type: "spring", stiffness: 400, damping: 40 }}
+          >
+            <motion.div 
+              className="progress-thumb"
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              whileHover={{ scale: 1.2 }}
+            />
+          </motion.div>
         </div>
       </div>
 
-      <div className="max-w-screen-2xl mx-auto px-4 h-full flex items-center justify-between">
-        {/* Left Section */}
-        <div className="flex items-center gap-4 w-[30%] min-w-[180px]">
-          {trackInfo?.artwork && (
-            <img 
-              src={trackInfo.artwork} 
-              alt={trackInfo.title} 
-              className="w-14 h-14 rounded shadow"
-            />
-          )}
-          <div className="flex flex-col min-w-0">
-            <div className="flex items-center gap-2">
-              <h3 className="text-white text-sm font-medium truncate">
-                {trackInfo?.title || 'No track playing'}
-              </h3>
-              <button 
-                onClick={() => onToggleFavorite?.()}
-                className={`text-sm ${isFavorite ? 'text-red-500' : 'text-white/60 hover:text-white'}`}
+      <div className="player-content max-w-screen-2xl mx-auto px-4 h-full flex items-center justify-between">
+        {/* Enhanced Left Section */}
+        <div className="left-section flex items-center gap-4 w-[30%] min-w-[180px]">
+          <AnimatePresence mode="wait">
+            {trackInfo?.artwork && (
+              <motion.img 
+                key={trackInfo.artwork}
+                src={trackInfo.artwork} 
+                alt={trackInfo.title} 
+                className="track-artwork w-14 h-14 rounded-lg shadow-lg object-cover"
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0, opacity: 0 }}
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              />
+            )}
+          </AnimatePresence>
+          
+          <div className="track-details flex flex-col min-w-0">
+            <div className="flex items-center gap-3">
+              <motion.h3 
+                className="track-title text-white text-sm font-medium truncate"
+                animate={{ opacity: trackInfo?.title ? 1 : 0.6 }}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                {trackInfo?.title || 'No track playing'}
+              </motion.h3>
+              <motion.button 
+                onClick={() => onToggleFavorite?.()}
+                className={`favorite-button ${isFavorite ? 'active' : ''}`}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" />
                 </svg>
-              </button>
+              </motion.button>
             </div>
-            <span className="text-white/60 text-xs truncate">
+            <motion.span 
+              className="artist-name text-white/60 text-xs truncate"
+              animate={{ opacity: trackInfo?.artist ? 1 : 0.4 }}
+            >
               {trackInfo?.artist || 'Unknown artist'}
-            </span>
+            </motion.span>
           </div>
-        </div>
-
-        {/* Center Section */}
-        <div className="flex flex-col items-center max-w-[40%] w-full">
-          <div className="flex items-center gap-6">
-            <button 
+        </div>        {/* Enhanced Center Section */}
+        <div className="center-section flex flex-col items-center max-w-[40%] w-full">
+          <div className="controls-container flex items-center gap-6">
+            <motion.button 
               onClick={() => setIsShuffleOn(!isShuffleOn)}
-              className={`p-2 ${isShuffleOn ? 'text-red-500' : 'text-white/60 hover:text-white'}`}
+              className={`control-button ${isShuffleOn ? 'active' : ''}`}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path d="M10.293 15.707a1 1 0 010-1.414L12.586 12H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 111.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" />
-                <path d="M9.707 4.293a1 1 0 010 1.414L7.414 8H15a1 1 0 110 2H7.414l2.293 2.293a1 1 0 11-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" />
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/>
               </svg>
-            </button>
+            </motion.button>
 
-            <button 
+            <motion.button 
               onClick={onPrevTrack}
-              className="text-white/60 hover:text-white p-2"
+              className="control-button"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path d="M8.445 14.832A1 1 0 0010 14v-2.798l5.445 3.63A1 1 0 0017 14V6a1 1 0 00-1.555-.832L10 8.798V6a1 1 0 00-1.555-.832l-6 4a1 1 0 000 1.664l6 4z" />
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M6 6h2v12H6V6zm3.5 6l8.5 6V6l-8.5 6z"/>
               </svg>
-            </button>
+            </motion.button>
 
-            <button 
+            <motion.button 
               onClick={handlePlayPause}
-              className="w-8 h-8 rounded-full bg-white flex items-center justify-center hover:scale-105 transition-transform"
+              className="play-button w-10 h-10 rounded-full flex items-center justify-center"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
             >
               {isPlaying ? (
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M8 5v14h3V5H8zm5 0v14h3V5h-3z"/>
                 </svg>
               ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-0.5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M8 5v14l11-7z"/>
                 </svg>
               )}
-            </button>
+            </motion.button>
 
-            <button 
+            <motion.button 
               onClick={onNextTrack}
-              className="text-white/60 hover:text-white p-2"
+              className="control-button"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M4.555 5.168A1 1 0 003 6v8a1 1 0 001.555.832L10 11.202V14a1 1 0 001.555.832l6-4a1 1 0 000-1.664l-6-4A1 1 0 0010 6v2.798L4.555 5.168z" />
               </svg>
-            </button>
+            </motion.button>
 
-            <button 
+            <motion.button 
               onClick={() => setIsRepeatOn(!isRepeatOn)}
-              className={`p-2 ${isRepeatOn ? 'text-red-500' : 'text-white/60 hover:text-white'}`}
+              className={`control-button ${isRepeatOn ? 'active' : ''}`}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path d="M10 3v2a5 5 0 00-3.54 8.54l-1.41 1.41A7 7 0 0110 3zm4.95 2.05A7 7 0 0110 17v-2a5 5 0 003.54-8.54l1.41-1.41zM10 20l-4-4 4-4v8zm0-12V0l4 4-4 4z" />
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/>
               </svg>
-            </button>
+            </motion.button>
           </div>
           
-          <div className="flex items-center gap-2 mt-1">
-            <span className="text-xs text-white/60">{formatTime(currentTime)}</span>
-            <span className="text-xs text-white/60">{formatTime(duration)}</span>
-          </div>
-        </div>
-
-        {/* Right Section */}
-        <div className="flex items-center gap-4 w-[30%] justify-end">
-          <button 
-            onClick={() => setShowLyrics(!showLyrics)}
-            className={`p-2 ${showLyrics ? 'text-red-500' : 'text-white/60 hover:text-white'}`}
+          <motion.div 
+            className="time-display flex items-center gap-2 mt-2"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5zm3 1h10v1H5V6zm0 3h10v1H5V9zm0 3h10v1H5v-1z" clipRule="evenodd" />
+            <span className="current-time text-xs text-white/70">{formatTime(currentTime)}</span>
+            <span className="separator text-white/40">•</span>
+            <span className="total-time text-xs text-white/70">{formatTime(duration)}</span>
+          </motion.div>
+        </div>        {/* Enhanced Right Section */}
+        <div className="right-section flex items-center gap-4 w-[30%] justify-end">
+          <motion.button 
+            onClick={() => setShowLyrics(!showLyrics)}
+            className={`control-button ${showLyrics ? 'active' : ''}`}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
             </svg>
-          </button>
+          </motion.button>
 
-          <button 
+          <motion.button 
             onClick={toggleMute}
-            className="text-white/60 hover:text-white p-2"
+            className="control-button"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
           >
             {isMuted || volume === 0 ? (
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM12.293 7.293a1 1 0 011.414 0L15 8.586l1.293-1.293a1 1 0 111.414 1.414L16.414 10l1.293 1.293a1 1 0 01-1.414 1.414L15 11.414l-1.293 1.293a1 1 0 01-1.414-1.414L13.586 10l-1.293-1.293a1 1 0 010-1.414z" />
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
               </svg>
             ) : (
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.984 5.984 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.983 3.983 0 00-1.172-2.828 1 1 0 010-1.415z" />
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
               </svg>
             )}
-          </button>
+          </motion.button>
 
-          <div className="w-24 flex items-center group">
+          <div className="volume-section w-24 flex items-center group">
             <input
               type="range"
               min="0"
@@ -262,12 +307,12 @@ const AudioPlayerBar = ({
               step="0.01"
               value={volume}
               onChange={handleVolumeChange}
-              className="w-full cursor-pointer"
+              className="volume-slider w-full cursor-pointer"
             />
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

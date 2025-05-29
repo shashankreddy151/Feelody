@@ -1,0 +1,80 @@
+/* Enhanced Keyboard Shortcuts Help Modal with Bright Colors */
+.shortcuts-overlay {
+  background: radial-gradient(circle at center, 
+    rgba(59, 130, 246, 0.2) 0%, 
+    rgba(147, 51, 234, 0.15) 50%, 
+    rgba(0, 0, 0, 0.7) 100%
+  );
+  backdrop-filter: blur(8px);
+}
+
+.shortcuts-modal {
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+  0% { 
+    opacity: 0; 
+    transform: scale(0.9) translateY(20px); 
+  }
+  100% { 
+    opacity: 1; 
+    transform: scale(1) translateY(0); 
+  }
+}
+
+.shortcuts-content {
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.15) 0%, 
+    rgba(59, 130, 246, 0.1) 50%, 
+    rgba(147, 51, 234, 0.1) 100%
+  );
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 
+    0 25px 50px rgba(0, 0, 0, 0.5),
+    0 0 60px rgba(59, 130, 246, 0.2),
+    0 0 0 1px rgba(255, 255, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+kbd {
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.2) 0%, 
+    rgba(59, 130, 246, 0.15) 100%
+  );
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.95);
+  box-shadow: 
+    0 2px 6px rgba(0, 0, 0, 0.3),
+    0 0 15px rgba(59, 130, 246, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transition: all 0.2s ease;
+}
+
+kbd:hover {
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.3) 0%, 
+    rgba(59, 130, 246, 0.25) 100%
+  );
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.4),
+    0 0 25px rgba(59, 130, 246, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  transform: translateY(-1px);
+}
+
+/* Responsive design */
+@media (max-width: 640px) {
+  .shortcuts-content {
+    padding: 1.5rem;
+  }
+  
+  .shortcuts-modal {
+    max-width: 95vw;
+  }
+}

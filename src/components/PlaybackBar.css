@@ -1,165 +1,559 @@
-.playback-bar-enter {
-  transform: translateY(100%);
+
+/* Enhanced Playback Bar Container with Bright Colors */
+.playback-bar {
+  background: linear-gradient(135deg, 
+    rgba(59, 130, 246, 0.2) 0%, 
+    rgba(147, 51, 234, 0.15) 25%, 
+    rgba(236, 72, 153, 0.15) 50%, 
+    rgba(245, 101, 101, 0.15) 75%, 
+    rgba(251, 146, 60, 0.2) 100%
+  );
+  backdrop-filter: blur(40px);
+  border-top: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 
+    0 -10px 40px rgba(59, 130, 246, 0.2),
+    0 -5px 20px rgba(147, 51, 234, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  position: relative;
 }
 
-.playback-bar-enter-active {
-  transform: translateY(0);
-  transition: transform 300ms ease-in-out;
+.playback-bar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, 
+    rgba(59, 130, 246, 0.6) 0%, 
+    rgba(147, 51, 234, 0.6) 25%, 
+    rgba(236, 72, 153, 0.6) 50%, 
+    rgba(245, 101, 101, 0.6) 75%, 
+    rgba(251, 146, 60, 0.6) 100%
+  );
 }
 
-.playback-bar-exit {
-  transform: translateY(0);
+/* Enhanced Track Image with Bright Effects */
+.track-image {
+  border-radius: 12px;
+  box-shadow: 
+    0 8px 25px rgba(59, 130, 246, 0.3),
+    0 0 0 2px rgba(255, 255, 255, 0.3),
+    0 0 20px rgba(147, 51, 234, 0.2);
+  transition: all 0.3s ease;
+  border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
-.playback-bar-exit-active {
-  transform: translateY(100%);
-  transition: transform 300ms ease-in-out;
+.track-image:hover {
+  transform: scale(1.08);
+  box-shadow: 
+    0 12px 35px rgba(59, 130, 246, 0.4),
+    0 0 0 3px rgba(255, 255, 255, 0.5),
+    0 0 30px rgba(147, 51, 234, 0.3),
+    0 0 40px rgba(236, 72, 153, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
 }
 
-/* Custom Range Input Styling */
-input[type="range"] {
-  -webkit-appearance: none;
-  appearance: none;
-  background: transparent;
-  cursor: pointer;
+/* Enhanced Track Info with Bright Text */
+.track-info h3 {
+  background: linear-gradient(135deg, 
+    #ffffff 0%, 
+    #f0f9ff 50%, 
+    #dbeafe 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* Track */
-input[type="range"]::-webkit-slider-runnable-track {
-  background: #4D4D4D;
-  height: 4px;
-  border-radius: 2px;
+.track-info p {
+  color: rgba(255, 255, 255, 0.9);
+  transition: color 0.3s ease;
+  font-weight: 500;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
-input[type="range"]::-moz-range-track {
-  background: #4D4D4D;
-  height: 4px;
-  border-radius: 2px;
+.track-info p:hover {
+  color: rgba(255, 255, 255, 0.9);
 }
 
-/* Thumb */
-input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  margin-top: -4px;
-  background-color: #fff;
-  height: 12px;
-  width: 12px;
+/* Enhanced Control Buttons with Bright Colors */
+.control-button {
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.25) 0%, 
+    rgba(59, 130, 246, 0.15) 50%, 
+    rgba(147, 51, 234, 0.15) 100%
+  );
+  backdrop-filter: blur(15px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: 50%;
-  border: none;
-  transition: all 0.2s ease-in-out;
-  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  color: rgba(255, 255, 255, 0.9);
+  box-shadow: 
+    0 4px 15px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
-input[type="range"]::-moz-range-thumb {
-  border: none;
-  border-radius: 50%;
-  background-color: #fff;
-  height: 12px;
-  width: 12px;
-  transition: all 0.2s ease-in-out;
+.control-button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, 
+    rgba(255, 255, 255, 0.3) 0%, 
+    rgba(59, 130, 246, 0.2) 50%, 
+    transparent 70%
+  );
   opacity: 0;
+  transition: opacity 0.3s;
 }
 
-/* Show thumb on hover */
-input[type="range"]:hover::-webkit-slider-thumb {
+.control-button:hover::before {
   opacity: 1;
 }
 
-input[type="range"]:hover::-moz-range-thumb {
-  opacity: 1;
+.control-button:hover {
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.35) 0%, 
+    rgba(59, 130, 246, 0.25) 50%, 
+    rgba(147, 51, 234, 0.25) 100%
+  );
+  transform: scale(1.15) translateY(-2px);
+  box-shadow: 
+    0 8px 25px rgba(59, 130, 246, 0.3),
+    0 0 30px rgba(255, 255, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 1);
 }
 
-/* Active thumb */
-input[type="range"]:active::-webkit-slider-thumb {
-  transform: scale(1.2);
-}
-
-input[type="range"]:active::-moz-range-thumb {
-  transform: scale(1.2);
-}
-
-/* Focus styles */
-input[type="range"]:focus {
-  outline: none;
-}
-
-input[type="range"]:focus::-webkit-slider-thumb {
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
-}
-
-input[type="range"]:focus::-moz-range-thumb {
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
-}
-
-/* Volume slider specific styles */
-.volume-slider input[type="range"] {
-  width: 93px;
-}
-
-/* Hover animations for buttons */
-.playback-control {
-  transition: transform 0.2s ease;
-}
-
-.playback-control:hover {
-  transform: scale(1.1);
-}
-
-.playback-control:active {
+.control-button:active {
   transform: scale(0.95);
 }
 
-/* Time display */
+.control-button.active {
+  background: linear-gradient(135deg, 
+    #3b82f6 0%, 
+    #1d4ed8 50%, 
+    #1e40af 100%
+  );
+  border-color: rgba(255, 255, 255, 0.4);
+  color: white;
+  box-shadow: 
+    0 6px 20px rgba(59, 130, 246, 0.5),
+    0 0 30px rgba(59, 130, 246, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* Enhanced Play/Pause Button with Bright Colors */
+.play-button {
+  background: linear-gradient(135deg, 
+    #ffffff 0%, 
+    #f0f9ff 50%, 
+    #dbeafe 100%
+  );
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 
+    0 8px 25px rgba(59, 130, 246, 0.4),
+    0 0 30px rgba(255, 255, 255, 0.2),
+    inset 0 2px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -2px 0 rgba(59, 130, 246, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  color: #1f2937;
+}
+
+.play-button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, 
+    rgba(59, 130, 246, 0.1) 0%, 
+    rgba(147, 51, 234, 0.1) 50%, 
+    rgba(236, 72, 153, 0.1) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.play-button:hover::before {
+  opacity: 1;
+}
+
+.play-button:hover {
+  transform: scale(1.2) translateY(-3px);
+  box-shadow: 
+    0 12px 40px rgba(59, 130, 246, 0.6),
+    0 0 50px rgba(255, 255, 255, 0.3),
+    inset 0 2px 0 rgba(255, 255, 255, 1),
+    inset 0 -2px 0 rgba(59, 130, 246, 0.3);
+  background: linear-gradient(135deg, 
+    #ffffff 0%, 
+    #e0f2fe 50%, 
+    #b3e5fc 100%
+  );
+}
+
+.play-button:active {
+  transform: scale(1.0);
+}
+
+/* Loading Animation for Play Button */
+.loading-spinner {
+  border: 2px solid rgba(0, 0, 0, 0.3);
+  border-top: 2px solid #000;
+  border-radius: 50%;
+  animation: loading-spin 1s linear infinite;
+}
+
+@keyframes loading-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Enhanced Progress Bar with Bright Colors */
+.progress-container {
+  background: linear-gradient(90deg, 
+    rgba(255, 255, 255, 0.25) 0%, 
+    rgba(59, 130, 246, 0.15) 50%, 
+    rgba(255, 255, 255, 0.25) 100%
+  );
+  backdrop-filter: blur(15px);
+  border-radius: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  overflow: hidden;
+  position: relative;
+  height: 10px;
+  transition: all 0.3s ease;
+  box-shadow: 
+    0 4px 15px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.progress-container:hover {
+  height: 14px;
+  background: linear-gradient(90deg, 
+    rgba(255, 255, 255, 0.35) 0%, 
+    rgba(59, 130, 246, 0.25) 50%, 
+    rgba(255, 255, 255, 0.35) 100%
+  );
+  box-shadow: 
+    0 6px 20px rgba(59, 130, 246, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.progress-fill {
+  background: linear-gradient(90deg, 
+    #10b981 0%, 
+    #059669 25%, 
+    #3b82f6 50%, 
+    #8b5cf6 75%, 
+    #ec4899 100%
+  );
+  border-radius: inherit;
+  transition: all 0.2s ease;
+  position: relative;
+  height: 100%;
+  box-shadow: 
+    0 2px 15px rgba(59, 130, 246, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(255, 255, 255, 0.6) 50%, 
+    transparent 100%
+  );
+  animation: progress-shimmer 2s ease-in-out infinite;
+}
+
+@keyframes progress-shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.progress-thumb {
+  position: absolute;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  background: linear-gradient(135deg, 
+    #ffffff 0%, 
+    #f0f9ff 50%, 
+    #dbeafe 100%
+  );
+  border: 3px solid rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: all 0.3s ease;
+  box-shadow: 
+    0 6px 20px rgba(59, 130, 246, 0.4),
+    0 0 0 2px rgba(59, 130, 246, 0.6);
+  cursor: pointer;
+}
+
+.progress-container:hover .progress-thumb {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.2);
+}
+
+.progress-thumb:hover {
+  box-shadow: 
+    0 8px 25px rgba(59, 130, 246, 0.6),
+    0 0 0 3px rgba(59, 130, 246, 0.8),
+    0 0 30px rgba(59, 130, 246, 0.4);
+  transform: translate(-50%, -50%) scale(1.4);
+}
+
+/* Enhanced Volume Slider with Bright Colors */
+.volume-control {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.2) 0%, 
+    rgba(59, 130, 246, 0.15) 100%
+  );
+  backdrop-filter: blur(15px);
+  border-radius: 25px;
+  padding: 10px 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+  box-shadow: 
+    0 4px 15px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.volume-control:hover {
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.3) 0%, 
+    rgba(59, 130, 246, 0.25) 100%
+  );
+  transform: scale(1.05);
+  box-shadow: 
+    0 6px 20px rgba(59, 130, 246, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.volume-slider {
+  width: 100px;
+  height: 8px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: linear-gradient(90deg, 
+    rgba(255, 255, 255, 0.3) 0%, 
+    rgba(59, 130, 246, 0.2) 50%, 
+    rgba(147, 51, 234, 0.2) 100%
+  );
+  border-radius: 4px;
+  outline: none;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: linear-gradient(135deg, 
+    #ffffff 0%, 
+    #f0f9ff 50%, 
+    #dbeafe 100%
+  );
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 3px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 
+    0 4px 15px rgba(59, 130, 246, 0.4),
+    0 0 0 2px rgba(59, 130, 246, 0.6);
+}
+
+.volume-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.4);
+  box-shadow: 
+    0 6px 20px rgba(59, 130, 246, 0.6),
+    0 0 0 3px rgba(59, 130, 246, 0.8),
+    0 0 30px rgba(59, 130, 246, 0.4);
+}
+
+.volume-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: linear-gradient(135deg, 
+    #ffffff 0%, 
+    #f0f9ff 50%, 
+    #dbeafe 100%
+  );
+  border-radius: 50%;
+  cursor: pointer;
+  border: 3px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 
+    0 4px 15px rgba(59, 130, 246, 0.4),
+    0 0 0 2px rgba(59, 130, 246, 0.6);
+  transition: all 0.3s ease;
+}
+
+.volume-slider::-moz-range-thumb:hover {
+  transform: scale(1.4);
+  box-shadow: 
+    0 6px 20px rgba(59, 130, 246, 0.6),
+    0 0 0 3px rgba(59, 130, 246, 0.8),
+    0 0 30px rgba(59, 130, 246, 0.4);
+}
+
+/* Enhanced Time Display */
 .time-display {
   font-variant-numeric: tabular-nums;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+  font-weight: 500;
+  min-width: 40px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 4px 8px;
+  border-radius: 6px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Progress bar hover effect */
-.progress-bar-container:hover .progress-indicator {
-  transform: scale(1);
+/* Enhanced Heart/Like Button */
+.heart-button {
+  color: rgba(255, 255, 255, 0.6);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
 
-/* Queue button hover animation */
+.heart-button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(239, 68, 68, 0.2) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.heart-button:hover::before {
+  opacity: 1;
+}
+
+.heart-button:hover {
+  color: #ef4444;
+  transform: scale(1.1);
+}
+
+.heart-button.liked {
+  color: #ef4444;
+  animation: heart-bounce 0.6s ease;
+}
+
+@keyframes heart-bounce {
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.2); }
+  50% { transform: scale(0.9); }
+  75% { transform: scale(1.05); }
+}
+
+/* Enhanced Queue Button */
 .queue-button {
-  transition: transform 0.2s ease;
+  transition: all 0.3s ease;
+  position: relative;
 }
 
 .queue-button:hover {
   transform: translateY(-2px);
+  color: rgba(255, 255, 255, 0.9);
 }
 
-/* Progress bar styles */
-.progress-bar-container {
-  transition: height 0.15s ease;
-  padding: 12px 0; /* Add padding to increase hit area */
+/* Responsive Design */
+@media (max-width: 768px) {
+  .playback-bar {
+    padding: 12px 16px;
+    height: auto;
+  }
+  
+  .track-image {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .control-button {
+    padding: 8px;
+  }
+  
+  .play-button {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .volume-control {
+    display: none;
+  }
+  
+  .time-display {
+    font-size: 10px;
+    min-width: 32px;
+    padding: 2px 4px;
+  }
+  
+  .progress-container {
+    height: 6px;
+  }
+  
+  .progress-container:hover {
+    height: 8px;
+  }
 }
 
-.progress-bar-container:hover {
-  height: 0.25rem;
-}
-
-/* Make sure the hover effect works on the entire hit area */
-.hover-progress {
-  transition: opacity 0.15s ease;
-  cursor: pointer;
-  margin: -12px 0; /* Compensate for the padding to ensure proper hover area */
-}
-
-/* Progress dot styles */
-.progress-dot {
+/* Animation for slide up effect */
+.playback-bar-enter {
+  transform: translateY(100%);
   opacity: 0;
-  transition: transform 300ms ease-out, opacity 600ms ease-out;
-  transform: translate(-50%, -50%) scale(0.75) !important;
 }
 
-.progress-bar-container:hover .progress-dot {
+.playback-bar-enter-active {
+  transform: translateY(0);
   opacity: 1;
-  transform: translate(-50%, -50%) scale(1) !important;
-  transition: transform 300ms ease-out, opacity 300ms ease-out;
+  transition: all 400ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Ensure smooth transitions */
-.progress-bar-container > div {
-  transition: width 0.1s linear;
+.playback-bar-exit {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.playback-bar-exit-active {
+  transform: translateY(100%);
+  opacity: 0;
+  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhanced Focus States */
+.control-button:focus,
+.play-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.4);
+}
+
+.volume-slider:focus {
+  outline: none;
+}
+
+/* Accessibility improvements */
+.control-button:focus-visible,
+.play-button:focus-visible {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.6);
 }

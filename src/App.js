@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useState, useRef, useEffect } from "react";
 import MoodSelector from "./components/MoodSelector";
 import Player from "./pages/Player";
@@ -156,30 +156,48 @@ function AnimatedRoutes() {
       setIsLoadingTrack(false);
     }
   };
-
   // Update PlaybackBar props to include audiusTrack for duration
   return (
-    <div className="relative min-h-screen pt-12">
+    <div className="relative min-h-screen pt-12 overflow-hidden">
       <Logo />
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route
             path="/"
             element={
-              <div className="min-h-[calc(100vh-3rem)] flex flex-col items-center justify-center">
+              <motion.div 
+                className="min-h-[calc(100vh-3rem)] flex flex-col items-center justify-center"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 1.05 }}
+                transition={{ 
+                  duration: 0.6, 
+                  ease: [0.22, 1, 0.36, 1] 
+                }}
+              >
                 <MoodSelector />
-              </div>
+              </motion.div>
             }
           />
           <Route
             path="/player"
             element={
-              <Player 
-                onTrackPlay={playTrack}
-                currentTrack={currentTrack}
-                isPlaying={isPlaying}
-                isLoadingTrack={isLoadingTrack}
-              />
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ 
+                  duration: 0.5, 
+                  ease: [0.22, 1, 0.36, 1] 
+                }}
+              >
+                <Player 
+                  onTrackPlay={playTrack}
+                  currentTrack={currentTrack}
+                  isPlaying={isPlaying}
+                  isLoadingTrack={isLoadingTrack}
+                />
+              </motion.div>
             }
           />
         </Routes>
