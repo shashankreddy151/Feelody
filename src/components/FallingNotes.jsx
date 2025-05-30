@@ -29,12 +29,10 @@ const FallingNotes = () => {
         color: COLORS[Math.floor(Math.random() * COLORS.length)],
         rotation: Math.random() * 360,
         blur: Math.random() * 2,
-      };
-
-      setNotes(prev => {
+      };      setNotes(prev => {
         // Remove oldest note if we've reached the maximum
         if (prev.length >= maxNotes) {
-          const [_, ...rest] = prev;
+          const [, ...rest] = prev;
           return [...rest, note];
         }
         return [...prev, note];

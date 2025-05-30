@@ -29,12 +29,14 @@
     "vm-browserify": "^1.1.2",
     "web-vitals": "^2.1.4",
     "web3": "^4.16.0"
-  },
-  "scripts": {
+  },  "scripts": {
     "start": "react-app-rewired start",
-    "build": "react-app-rewired build",
+    "build": "set CI=false && react-app-rewired build",
+    "build:check": "node build-check.js",
     "test": "react-app-rewired test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "build:analyze": "npm run build && npx webpack-bundle-analyzer build/static/js/*.js",
+    "lint": "eslint src --ext .js,.jsx --fix"
   },
   "eslintConfig": {
     "extends": [

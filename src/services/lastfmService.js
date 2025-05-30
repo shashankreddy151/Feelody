@@ -14,9 +14,16 @@ class LastFmService {
     this.apiKey = process.env.REACT_APP_LASTFM_API_KEY;
     this.baseUrl = 'https://ws.audioscrobbler.com/2.0/';
     this.cache = new Map();
+    
+    if (!this.apiKey) {
+      console.warn('Last.fm API key not found. Some features may be limited.');
+    }
   }
-
   async makeRequest(params) {
+    if (!this.apiKey) {
+      throw new Error('Last.fm API key not configured');
+    }
+    
     const queryParams = new URLSearchParams({
       ...params,
       api_key: this.apiKey,
@@ -34,34 +41,42 @@ class LastFmService {
 
     return response.json();
   }
-
   async getTracksByMood(mood, options = { limit: 30, page: 1 }) {
     try {
+      // Return empty array if no API key is configured
+      if (!this.apiKey) {
+        console.warn('Last.fm API key not configured, returning empty results');
+        return [];
+      }
+
       const cacheKey = `${mood}-${options.page}`;
       if (this.cache.has(cacheKey)) {
         return this.cache.get(cacheKey);
       }
 
       const tags = MOOD_TAGS[mood];
-      if (!tags) return [];
+      if (!tags) return [];      const trackPromises = tags.map(async tag => {
+        try {
+          const result = await this.makeRequest({
+            method: 'tag.gettoptracks',
+            tag,
+            limit: Math.ceil(options.limit / tags.length),
+            page: options.page
+          });
 
-      const trackPromises = tags.map(async tag => {
-        const result = await this.makeRequest({
-          method: 'tag.gettoptracks',
-          tag,
-          limit: Math.ceil(options.limit / tags.length),
-          page: options.page
-        });
+          // Debug logging
+          console.log('API Response for tag', tag, ':', result);
+          
+          if (!result.tracks || !result.tracks.track) {
+            console.error('Invalid response structure for tag:', tag);
+            return [];
+          }
 
-        // Debug logging
-        console.log('API Response for tag', tag, ':', result);
-        
-        if (!result.tracks || !result.tracks.track) {
-          console.error('Invalid response structure for tag:', tag);
+          return result.tracks.track;
+        } catch (error) {
+          console.error(`Error fetching tracks for tag ${tag}:`, error);
           return [];
         }
-
-        return result.tracks.track;
       });
 
       const results = await Promise.all(trackPromises);

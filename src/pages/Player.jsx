@@ -1,13 +1,11 @@
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getMoodStyles } from '../utils/utils';
 import lastfmService from '../services/lastfmService';
-import audiusService from '../services/audiusService';
 import LoadingAnimation from '../components/LoadingAnimation';
 import FallingNotes from '../components/FallingNotes';
 import Sidebar from '../components/Sidebar';
-import KeyboardShortcutsHelp from '../components/KeyboardShortcutsHelp';
 import './Player.css';
 
 const LoadingSpinner = () => (
@@ -50,12 +48,10 @@ const PlayButton = ({ isPlaying, onClick, size = "small", isLoading = false }) =
 );
 
 const Player = ({ onTrackPlay, currentTrack, isPlaying, isLoadingTrack }) => {
-  const navigate = useNavigate();
-  const [tracks, setTracks] = useState([]);
+  const navigate = useNavigate();  const [tracks, setTracks] = useState([]);
   const [selectedTrack, setSelectedTrack] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [artistInfo, setArtistInfo] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [recentlyPlayed, setRecentlyPlayed] = useState([]);
   const [favorites, setFavorites] = useState([]);
@@ -100,16 +96,11 @@ const Player = ({ onTrackPlay, currentTrack, isPlaying, isLoadingTrack }) => {
       fav.name === track.name && fav.artist?.name === track.artist?.name
     );
   };
-
   const handleTrackSelect = async (track) => {
     setIsLoading(true);
     try {
-      const [trackInfo, artistDetails] = await Promise.all([
-        lastfmService.getTrackInfo(track),
-        lastfmService.getArtistInfo(track.artist.name)
-      ]);
+      const trackInfo = await lastfmService.getTrackInfo(track);
       setSelectedTrack(trackInfo);
-      setArtistInfo(artistDetails);
       onTrackPlay(track);
       
       // Add to recently played

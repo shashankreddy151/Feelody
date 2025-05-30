@@ -91,7 +91,7 @@ const Sidebar = ({
       default:
         break;
     }
-  }, [isVisible, activeTab, selectedMoodIndex, selectedTrackIndex, quickMoods, recentlyPlayed, favorites, onClose]);
+  }, [isVisible, activeTab, selectedMoodIndex, selectedTrackIndex, quickMoods, recentlyPlayed, favorites, onClose, handleMoodSelect, handleTrackPlay, tabs]);
 
   useEffect(() => {
     setIsVisible(isOpen);
