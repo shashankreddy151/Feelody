@@ -29,6 +29,16 @@ const Sidebar = ({
     { id: 'favorites', label: 'Favorites', icon: '❤️' }
   ];
 
+  const handleMoodSelect = useCallback((mood) => {
+    onMoodChange?.(mood);
+    onClose?.();
+  }, [onMoodChange, onClose]);
+
+  const handleTrackPlay = useCallback((track) => {
+    onTrackSelect?.(track);
+    onClose?.();
+  }, [onTrackSelect, onClose]);
+
   // Keyboard navigation handler
   const handleKeyDown = useCallback((e) => {
     if (!isVisible) return;
@@ -91,7 +101,7 @@ const Sidebar = ({
       default:
         break;
     }
-  }, [isVisible, activeTab, selectedMoodIndex, selectedTrackIndex, quickMoods, recentlyPlayed, favorites, onClose, handleMoodSelect, handleTrackPlay, tabs]);
+  }, [isVisible, activeTab, selectedMoodIndex, selectedTrackIndex, quickMoods, recentlyPlayed, favorites, tabs, onClose, handleMoodSelect, handleTrackPlay]);
 
   useEffect(() => {
     setIsVisible(isOpen);
@@ -109,16 +119,6 @@ const Sidebar = ({
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, [isOpen, handleKeyDown]);
-
-  const handleMoodSelect = (mood) => {
-    onMoodChange?.(mood);
-    onClose?.();
-  };
-
-  const handleTrackPlay = (track) => {
-    onTrackSelect?.(track);
-    onClose?.();
-  };
 
   const handleTabChange = (tabId) => {
     setActiveTab(tabId);
