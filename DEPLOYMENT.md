@@ -4,7 +4,11 @@
 
 This project had several build issues that have been resolved:
 
-### 1. ESLint Warnings as Errors
+### 1. Node.js Version Compatibility
+- **Issue**: `@solana/codecs-core` requires Node.js >=20.18.0, but Netlify was using v18.20.8
+- **Fix**: Updated netlify.toml to use Node.js 20.18.0 and added .nvmrc for local development
+
+### 2. ESLint Warnings as Errors
 - **Issue**: CI environment treats ESLint warnings as errors
 - **Fix**: Set `CI=false` in build script and fixed all ESLint warnings
 
@@ -37,7 +41,7 @@ REACT_APP_LASTFM_API_KEY=your_lastfm_api_key_here
 ### 2. Build Settings in Netlify
 - **Build command**: `npm run build`
 - **Publish directory**: `build`
-- **Node version**: `18` (set in netlify.toml)
+- **Node version**: `20.18.0` (set in netlify.toml - **CRITICAL FOR BUILD SUCCESS**)
 
 ### 3. Deploy
 1. Connect your GitHub repository to Netlify

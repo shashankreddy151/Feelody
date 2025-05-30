@@ -2,7 +2,15 @@
 
 ## ✅ Issues Resolved
 
-### 1. **ESLint Warnings Treated as Errors**
+### 1. **Node.js Version Compatibility (CRITICAL)**
+- **Problem**: `@solana/codecs-core` package requires Node.js >=20.18.0, but Netlify was using v18.20.8
+- **Solution**: 
+  - Updated `netlify.toml` to use Node.js 20.18.0
+  - Added `.nvmrc` file for local development consistency
+  - Added `engines` field in package.json to specify requirements
+  - Enhanced build-check.js to validate Node.js version
+
+### 2. **ESLint Warnings Treated as Errors**
 - **Problem**: CI environment was treating ESLint warnings as build failures
 - **Solution**: 
   - Modified build script to use `CI=false`
@@ -40,8 +48,9 @@
 
 ## 🚀 Deployment Ready
 
-Your app is now ready for Netlify deployment! The build completes successfully with:
+Your app is now ready for Netlify deployment! The critical Node.js version issue has been resolved:
 
+- ✅ **Node.js 20.18.0** configured in netlify.toml (fixes @solana/codecs-core EBADENGINE error)
 - ✅ No ESLint errors
 - ✅ Proper environment variable handling  
 - ✅ Optimized webpack configuration
@@ -50,8 +59,9 @@ Your app is now ready for Netlify deployment! The build completes successfully w
 
 ## 📝 Next Steps for Netlify
 
-1. **Set Environment Variable**: Add `REACT_APP_LASTFM_API_KEY` in Netlify dashboard
-2. **Deploy**: Connect your repo and deploy
-3. **Verify**: Test all features work in production
+1. **CRITICAL**: Ensure Node.js version is 20.18.0+ (configured in netlify.toml)
+2. **Set Environment Variable**: Add `REACT_APP_LASTFM_API_KEY` in Netlify dashboard
+3. **Deploy**: Connect your repo and deploy
+4. **Verify**: Test all features work in production
 
-The app will now build successfully on Netlify! 🎉
+The EBADENGINE error should now be resolved! 🎉

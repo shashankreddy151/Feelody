@@ -6,6 +6,29 @@ const path = require('path');
 
 console.log('🔍 Pre-build checks...');
 
+// Check Node.js version
+const nodeVersion = process.version;
+const requiredNodeVersion = '20.18.0';
+const currentVersion = nodeVersion.replace('v', '');
+
+const versionComparison = (current, required) => {
+  const currentParts = current.split('.').map(Number);
+  const requiredParts = required.split('.').map(Number);
+  
+  for (let i = 0; i < 3; i++) {
+    if (currentParts[i] > requiredParts[i]) return 1;
+    if (currentParts[i] < requiredParts[i]) return -1;
+  }
+  return 0;
+};
+
+if (versionComparison(currentVersion, requiredNodeVersion) < 0) {
+  console.warn(`⚠️  Warning: Node.js ${nodeVersion} detected. Recommended: >=${requiredNodeVersion} for @solana/codecs-core compatibility`);
+  console.warn('   This may cause build issues on Netlify. Update netlify.toml NODE_VERSION if needed.');
+} else {
+  console.log(`✅ Node.js ${nodeVersion} meets requirements`);
+}
+
 // Check if required files exist
 const requiredFiles = [
   'package.json',
