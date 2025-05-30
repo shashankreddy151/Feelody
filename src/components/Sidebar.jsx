@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './Sidebar.css';
 
@@ -16,18 +16,18 @@ const Sidebar = ({
   const [selectedMoodIndex, setSelectedMoodIndex] = useState(0);
   const [selectedTrackIndex, setSelectedTrackIndex] = useState(0);
 
-  const quickMoods = [
+  const quickMoods = useMemo(() => [
     { mood: 'happy', icon: '😊', label: 'Happy', color: 'from-yellow-400 to-orange-500' },
     { mood: 'calm', icon: '🧘‍♀️', label: 'Calm', color: 'from-green-400 to-teal-500' },
     { mood: 'energetic', icon: '⚡', label: 'Energetic', color: 'from-red-500 to-purple-600' },
     { mood: 'melancholy', icon: '😔', label: 'Melancholy', color: 'from-indigo-900 to-purple-900' },
-  ];
+  ], []);
 
-  const tabs = [
+  const tabs = useMemo(() => [
     { id: 'moods', label: 'Quick Moods', icon: '🎭' },
     { id: 'recent', label: 'Recent', icon: '🕒' },
     { id: 'favorites', label: 'Favorites', icon: '❤️' }
-  ];
+  ], []);
 
   const handleMoodSelect = useCallback((mood) => {
     onMoodChange?.(mood);
