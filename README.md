@@ -17,8 +17,7 @@ Feelody is a mood-based music player that curates songs to match your emotions. 
 ---
 
 ## 🖥️ Demo
-- **Live Demo**: _[Add your Netlify/Vercel/GitHub Pages link here]_  
-- **Screenshots**: _[Add screenshots or GIFs here to showcase the UI]_  
+- **Live Demo**: https://feelody.netlify.app/  
 
 ---
 
